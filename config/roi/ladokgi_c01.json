@@ -1,0 +1,31 @@
+{
+  "frame_size": [
+    640,
+    360
+  ],
+  "polygons": [
+    [
+      [
+        161,
+        121
+      ],
+      [
+        190,
+        230
+      ],
+      [
+        251,
+        346
+      ],
+      [
+        539,
+        346
+      ],
+      [
+        215,
+        103
+      ]
+    ]
+  ],
+  "catatan": "ROI revisi Dihar 19 Nov 2026 (digambar di prototipe, dikonversi ke 640x360)"
+}

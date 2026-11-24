@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+*.bak
+# runtime output of the dashboard / monitor (logs, snapshots, uploads)
+outputs/monitor/
+outputs/upload*/
+# raw data & datasets are NOT in this repo (see Kaggle dataset link in README)
+data/
+*.zip
+*.mp4
+kaggle.json
+.env

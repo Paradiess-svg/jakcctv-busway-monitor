@@ -1,0 +1,35 @@
+{
+  "frame_size": [
+    640,
+    360
+  ],
+  "polygons": [
+    [
+      [
+        437,
+        142
+      ],
+      [
+        430,
+        131
+      ],
+      [
+        215,
+        141
+      ],
+      [
+        6,
+        155
+      ],
+      [
+        6,
+        199
+      ],
+      [
+        215,
+        168
+      ]
+    ]
+  ],
+  "catatan": "ROI revisi Dihar 19 Nov; batas atas diturunkan ke garis kerb (versi awal menangkap mobil di jalan seberang pembatas). Awal: _lama/c13_gatsu_dihar_19nov_awal.json"
+}

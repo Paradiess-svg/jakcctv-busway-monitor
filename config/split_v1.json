@@ -1,0 +1,88 @@
+{
+  "_catatan": "Split data v1 per kamera-TANGGAL (bukan acak per frame). Satu tanggal hanya boleh ada di satu split. 'cadangan' tidak dipakai. Usulan Claude 5 Nov 2026 -- c13/c14 perlu disetujui Gerry.",
+  "raw_dirs": [
+    "data/raw"
+  ],
+  "quota_per_kamera": {
+    "train": 330,
+    "valid": 50,
+    "test": 50
+  },
+  "bobot_periode": {
+    "pagi": 0.2,
+    "siang": 0.25,
+    "sore": 0.25,
+    "malam": 0.3
+  },
+  "min_gap_s": 30,
+  "porsi_idle": 0.15,
+  "mulai_malam_jam": 18,
+  "kamera": {
+    "c01_taman_literasi": {
+      "train": [
+        "2026-10-25",
+        "2026-10-28"
+      ],
+      "valid": [
+        "2026-10-26",
+        "2026-10-27"
+      ],
+      "test": [
+        "2026-10-29"
+      ],
+      "cadangan": [
+        "2026-10-30"
+      ]
+    },
+    "c04_gerbang_pemuda": {
+      "train": [
+        "2026-10-25",
+        "2026-10-28"
+      ],
+      "valid": [
+        "2026-10-26",
+        "2026-10-27"
+      ],
+      "test": [
+        "2026-10-29"
+      ],
+      "cadangan": [
+        "2026-10-30"
+      ]
+    },
+    "c13_gatsu": {
+      "train": [
+        "2026-10-28",
+        "2026-11-01"
+      ],
+      "valid": [
+        "2026-10-31"
+      ],
+      "test": [
+        "2026-10-27"
+      ],
+      "cadangan": [
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-26"
+      ]
+    },
+    "c14_gatsu": {
+      "train": [
+        "2026-10-28",
+        "2026-11-01"
+      ],
+      "valid": [
+        "2026-10-31"
+      ],
+      "test": [
+        "2026-10-27"
+      ],
+      "cadangan": [
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-26"
+      ]
+    }
+  }
+}

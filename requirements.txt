@@ -1,0 +1,15 @@
+# Core (capture, preprocessing, inference). Laptop without GPU: install CPU torch first:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+opencv-python
+numpy
+pyyaml
+tzdata          # Asia/Jakarta time zone on Windows
+ultralytics
+lap             # ByteTrack
+matplotlib
+
+# Dashboard
+fastapi
+uvicorn[standard]
+python-multipart
+# Also needs ffmpeg on PATH (reads the CCTV HLS streams).

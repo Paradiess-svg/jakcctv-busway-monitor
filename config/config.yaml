@@ -1,0 +1,130 @@
+# =====================================================================
+# config.yaml - semua parameter proyek (aturan #3: jangan hardcode)
+# Bagian di bawah ini dipakai oleh src/capture.py (Tahap 1)
+# =====================================================================
+
+# Pembagian kamera per laptop (node). Jalankan: python src/capture.py --node dihar
+nodes:
+  dihar: [c01_taman_literasi, c04_gerbang_pemuda]   # Windows
+  gerry: [c13_gatsu, c14_gatsu]                     # Ubuntu
+  # Ivan tidak menjalankan capture. Kalau mau, tambah di sini.
+
+cameras:
+  c01_taman_literasi:
+    name: "Taman Literasi C01 (kanan = pintu masuk terminal khusus TJ)"
+    url: "https://dki-jkt.balitower.co.id:7028/501478_JKS_SATPOLPP_TAMAN-LITERASI-C01_CCTV-01/tracks-v1/index.fmp4.m3u8"
+  c04_gerbang_pemuda:
+    name: "JKP Satpol PP Jl. Gerbang Pemuda C04"
+    url: "https://dki-jkt.balitower.co.id:7028/502506_JKP_SATPOL-PP_JL.-GERBANG-PEMUDA-C04_CCTV-01/tracks-v1/index.fmp4.m3u8"
+  c13_gatsu:
+    name: "JKP Polda Jl. Jend. Gatot Subroto C13"
+    url: "https://dki-jkt.balitower.co.id:7028/503300_JKP_POLDA_JL.-JEND.-GATOT-SUBROTO-C13_CCTV-02/tracks-v1/index.fmp4.m3u8"
+  c14_gatsu:
+    name: "JKP Polda Jl. Jend. Gatot Subroto C14"
+    url: "https://dki-jkt.balitower.co.id:7028/503303_JKP_POLDA_JL.-JEND.-GATOT-SUBROTO-C14_CCTV-01/tracks-v1/index.fmp4.m3u8"
+    aktif: false        # 19 Nov: kamera tersenggol, sudut berubah -> diganti ladokgi_c01 (data lama tetap dipakai di dataset)
+  ladokgi_c01:
+    name: "JKP DBM Flyover Ladokgi C01"
+    url: "https://dki-jkt.balitower.co.id:7028/503536_JKP_DBM_FLYOVER-LADOKGI-C01_CCTV-02/tracks-v1/index.fmp4.m3u8"
+
+# Untuk dasbor (Tahap 6): nama tampilan + koordinat kamera (dari Dihar 19 Nov, kecuali c14 perkiraan).
+dasbor:
+  kamera_default: [c01_taman_literasi, c04_gerbang_pemuda, c13_gatsu, ladokgi_c01]
+  bukan_busway: [ladokgi_c01]   # Flyover Ladokgi = pengganti CCTV rusak, bukan busway -> dikecualikan dari 'Kendaraan Melanggar' & sterilisasi
+  live_idle_menit: 10       # live otomatis berhenti kalau dasbor tidak dibuka selama N menit (cegah RAM/pagefile bengkak)
+  tampilan:
+    c01_taman_literasi: {nama: "Taman Literasi", lokasi: [-6.242667, 106.798778]}
+    c04_gerbang_pemuda: {nama: "Gerbang Pemuda", lokasi: [-6.212639, 106.807]}
+    c13_gatsu:          {nama: "Gatot Subroto", lokasi: [-6.207583, 106.80375]}
+    c14_gatsu:          {nama: "Gatot Subroto C14", lokasi: [-6.2236, 106.8100]}
+    ladokgi_c01:        {nama: "Flyover Ladokgi", lokasi: [-6.212306, 106.807111]}
+
+capture:
+  timezone: "Asia/Jakarta"      # semua nama folder/file pakai zona waktu ini, sama di Windows & Ubuntu
+  ffmpeg_path: ""               # kosong = cari "ffmpeg" di PATH. Isi kalau ffmpeg tidak ada di PATH
+  output_dir: "data/raw"        # frame mentah. TIDAK PERNAH ditimpa/dihapus (aturan #7)
+  clips_dir: "data/clips"
+  reference_dir: "data/reference"
+  log_dir: "logs"
+  min_free_disk_gb: 5           # berhenti otomatis kalau sisa disk di bawah ini
+
+  # Jam aktif (waktu lokal sesuai timezone). Kosongkan list [] = 24 jam.
+  # Dataset perlu pagi/siang/sore/malam, jadi default-nya hampir seluruh hari.
+  active_hours: ["05:00-23:00"]
+
+  # ---- Mode frame ----
+  # interval : simpan 1 frame tiap frame_interval_s
+  # motion   : simpan tiap frame_interval_s HANYA kalau ada gerakan di ROI busway;
+  #            kalau tidak ada gerakan simpan 1 frame tiap idle_interval_s (contoh negatif).
+  #            Butuh config/roi/<kamera>.json. Kalau file ROI belum ada -> otomatis jatuh ke mode interval.
+  mode: "interval"
+  frame_interval_s: 5           # aturan #12: jangan terlalu rapat. Minimal 2.
+  idle_interval_s: 60
+  jpeg_quality: 3               # skala ffmpeg -q:v: 2 (terbaik) ... 31 (terburuk). 3 = bagus (~36 KB/frame di 640x360)
+
+  motion:
+    sample_fps: 2               # frekuensi sampel untuk deteksi gerakan (hanya mode motion)
+    min_area_ratio: 0.01        # fraksi piksel ROI yang bergerak agar dianggap ada kendaraan
+    warmup_frames: 20           # frame awal untuk "belajar" background, belum dipakai memutuskan
+
+  # ---- Penyaring kualitas frame ----
+  quality:
+    black_mean_below: 6         # rata-rata abu-abu < ini dianggap frame hitam -> dibuang
+    frozen_restart_after_s: 60  # frame identik persis selama ini (detik) -> stream dianggap beku, restart.
+                                # Stream hidup selalu berubah (noise + jam di overlay), jadi 60 dtk aman.
+
+  # ---- Klip video pendek (untuk uji tracking & evaluasi pelanggaran) ----
+  clips:
+    enabled: true
+    duration_s: 300             # 5 menit per klip (~33 MB, disalin tanpa re-encode)
+    every_min: 60               # satu klip per kamera tiap 60 menit (jam aktif)
+    stagger_min: 3              # jeda antar kamera agar tidak serentak
+
+  # ---- Reconnect ----
+  reconnect:
+    stall_timeout_s: 90         # tidak ada frame selama ini -> restart ffmpeg
+    backoff_start_s: 5
+    backoff_max_s: 120
+
+# =====================================================================
+# Bagian di bawah ini dipakai oleh src/preprocessing.py (Tahap 2, kode Ivan 7 Nov)
+# Nilai diambil dari notebook prototipe Ivan (CLAHE 2.0/8x8, gamma malam 2.0).
+# CATATAN: model v2 dilatih dengan gambar MENTAH -> jangan nyalakan ini di depan model v2 (aturan #4).
+# =====================================================================
+preprocessing:
+  # Siang/malam ditentukan dari JAM (17 Nov): kecerahan gambar tidak bisa dipakai, malam CCTV Jakarta terang
+  # karena lampu (cuma 5/705 gambar malam terdeteksi dengan ambang 70). Sama dengan label dataset (>=18:00 atau <05:30 = malam).
+  malam_mulai_jam: 18
+  malam_selesai_jam: 5.5         # 05:30, sama dengan pilih_frame.py
+  day_night_threshold: 70        # cadangan kalau jam tidak diketahui: rata-rata abu-abu < ini = malam
+  glare:   {enabled: false, threshold: 240}
+  clahe:   {enabled: true, clip_limit: 2.0, tile: 8}
+  gamma_night: {enabled: true, value: 2.0}
+  denoise: {enabled: false, method: bilateral}   # dimatikan 17 Nov: tidak ada di proposal, mengaburkan motor jauh
+  unsharp: {enabled: false, amount: 0.5}
+
+# =====================================================================
+# Bagian di bawah ini dipakai oleh src/monitor.py (Tahap 5) dan dasbor (Tahap 6)
+# Tujuan: MONITORING klasifikasi TJ vs non-TJ di jalur busway, BUKAN tilang (keputusan Dihar 17 Nov).
+# =====================================================================
+monitor:
+  model: "hasil_training_v2/runs/tj_v2/weights/best.pt"
+  roi_dir: "config/roi"
+  imgsz: 640
+  conf: 0.25
+  proses_fps: 5               # frame yang diproses per detik video (CPU ~0,35 s/frame; sisanya dilewati)
+  min_detik_di_roi: 2.0       # keputusan A: kendaraan dicatat setelah >= 2 detik di ROI
+  titik_roi: "bawah_tengah"   # titik kendaraan yang dicek masuk ROI (roda menyentuh jalan)
+  dobel_iou: 0.5              # kendaraan diam (parkir) yang ID-nya berganti: posisi sama (IoU > ini)
+  dobel_detik: 120            #   dan kelompok sama dalam N detik terakhir -> tidak dicatat ulang
+  diam_detik: 600             # kendaraan DIAM (bus ngetem) yang sudah tercatat: kotak baru yang >60% menumpuk
+  diam_ioa: 0.6               #   dengan kotaknya dalam 10 menit tidak dicatat ulang (audit 19 Nov: bus parkir c01 tercatat berkali-kali)
+  kelompok:                   # keputusan B, C, D
+    tj:      [tj_bus, mikrotrans]
+    non_tj:  [bus_lain, car, motorcycle, truck]
+    abaikan: [kend_prioritas] # boleh lewat busway; tidak dicatat
+  output_dir: "outputs/monitor"
+  live_fps_baca_gpu: 5        # di GPU (Kaggle/Colab) ~15 ms/frame -> 5 fps per kamera untuk 4 kamera
+  live_fps_baca: 1            # mode live: frame per detik yang diambil dari tiap stream. CPU ~0,3 s/frame ->
+                              #   4 kamera x 1 fps ~ batas laptop. 1-2 kamera otomatis 2 fps (live.py).
+  preprocessing: false         # true = CLAHE+gamma (bagian preprocessing) sebelum YOLO; WAJIB sama dengan cara model dilatih

@@ -1,0 +1,12 @@
+Model: hasil_training (V2)/runs/tj_v2/weights/best.pt
+conf=0.25  IoU cocok=0.5  imgsz=640
+Waktu inference CPU mesin ini: rata-rata 387 ms/gambar (median 342, n=329)
+Gambar dengan kasus salah TJ: 12 (folder salah_tj/)
+
+TJ vs bukan-TJ:
+  valid        TJ 108/120 benar (recall 0.9, precision 0.831); TJ->bukan-TJ 7, TJ terlewat 5; bukan-TJ->TJ 2/1589; prediksi TJ tanpa label 20
+  valid_siang  TJ 65/75 benar (recall 0.867, precision 0.812); TJ->bukan-TJ 6, TJ terlewat 4; bukan-TJ->TJ 2/1084; prediksi TJ tanpa label 13
+  valid_malam  TJ 43/45 benar (recall 0.956, precision 0.86); TJ->bukan-TJ 1, TJ terlewat 1; bukan-TJ->TJ 0/505; prediksi TJ tanpa label 7
+  test         TJ 116/129 benar (recall 0.899, precision 0.872); TJ->bukan-TJ 2, TJ terlewat 11; bukan-TJ->TJ 1/1312; prediksi TJ tanpa label 16
+  test_siang   TJ 76/83 benar (recall 0.916, precision 0.95); TJ->bukan-TJ 0, TJ terlewat 7; bukan-TJ->TJ 1/675; prediksi TJ tanpa label 3
+  test_malam   TJ 40/46 benar (recall 0.87, precision 0.755); TJ->bukan-TJ 2, TJ terlewat 4; bukan-TJ->TJ 0/637; prediksi TJ tanpa label 13

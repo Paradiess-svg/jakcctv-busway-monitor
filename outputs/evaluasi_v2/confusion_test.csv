@@ -1,0 +1,9 @@
+pred \ label,tj_bus,bus_lain,car,motorcycle,truck,mikrotrans,kend_prioritas,background
+tj_bus,116,1,0,0,0,0,0,16
+bus_lain,2,25,1,0,3,0,0,14
+car,0,3,724,4,16,0,0,308
+motorcycle,0,0,15,208,0,0,0,159
+truck,0,3,1,0,52,0,1,18
+mikrotrans,0,0,0,0,0,2,0,1
+kend_prioritas,0,0,0,0,0,0,0,1
+background,11,12,160,67,14,0,0,0
