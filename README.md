@@ -59,6 +59,7 @@ Classes: `tj_bus`, `bus_lain` (other bus), `car`, `motorcycle`, `truck`, `mikrot
 1. Open the public notebook **[Dasbor TJ vs Non-TJ on Kaggle](https://www.kaggle.com/code/izdiharwibowo/dasbor-tj-vs-non-tj)** and click *Copy & Edit*, or import [`notebooks/dasbor_kaggle.ipynb`](notebooks/dasbor_kaggle.ipynb). Settings: **GPU T4**, **Internet on**.
 2. Run all. Cell 1 clones this repo, and cell 5 prints a public `trycloudflare.com` link for viewers plus an **admin** link (keep it private; it can switch cameras and verify detections).
 3. Add `?lang=en` to the link for the English interface. A toggle is also in the header.
+4. Choose a **case-study mode** in the header (or add `?mode=`): **Normal** (`semua`, all 4 cameras), **No Ladokgi** (`tanpa_ladokgi`, only the 3 busway cameras), or **Busway Only** (`busway`, pure busway lanes; it also hides Taman Literasi, which is the entrance to Blok M Terminal). The mode filters cameras, logs, map, statistics and accuracy for that viewer only.
 
 ### Option B: local
 ```bash
