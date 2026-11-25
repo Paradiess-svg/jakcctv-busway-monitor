@@ -4,7 +4,7 @@ Real-time monitoring of who uses Jakarta's **busway lane**. The system reads Jak
 
 > This is a **monitoring / research** project, not a ticketing system. No faces or licence plates are identified.
 
-Built by IPB University students for the course *Intelligent Computer Vision* (2026).
+Built by Dihar, Ivan and Gerry (IPB University) for the course *Intelligent Computer Vision* (2026). See [Team](#team).
 
 ![Dashboard](docs/img/dashboard.png)
 
@@ -81,6 +81,18 @@ The dataset (1,401 human-checked images, 13,029 boxes, 7 classes, split by camer
 - `bus_lain` (other bus) is often confused with truck/car (recall 0.575). Motorcycles at night are weaker.
 - Little heavy-rain or fog data. The dashboard depends on the public JakCCTV streams being online.
 
+## Team
+
+| Member | Role |
+|---|---|
+| **Dihar** | Project lead, data pipeline, model, backend & dashboard |
+| **Ivan** | Image processing, busway ROI, frontend design |
+| **Gerry** | Data collection (camera node), labelling & dataset |
+
+Thanks to Ivan and Gerry for their support throughout this project.
+
+**AI assistance:** parts of the code, documentation and analysis were developed with [Claude](https://claude.com/claude-code) (Anthropic) as a coding assistant. All data labels were checked by the team, and every reported number comes from our own evaluation.
+
 ## Licence & attribution
 
 - Code and model weights: **AGPL-3.0** (the model is derived from [Ultralytics YOLO11](https://github.com/ultralytics/ultralytics), which is AGPL-3.0). See [`LICENSE`](LICENSE).
@@ -89,4 +101,4 @@ The dataset (1,401 human-checked images, 13,029 boxes, 7 classes, split by camer
 
 ---
 
-**Bahasa Indonesia.** Sistem pemantauan jalur busway dari CCTV publik JakCCTV: YOLO11s hasil fine-tune membedakan bus Transjakarta dan kendaraan lain di jalur busway, lalu hasilnya tampil di dasbor web 5 halaman (tersedia bahasa Indonesia dan Inggris). Ini pemantauan, bukan penilangan. Cara menjalankan: buka `notebooks/dasbor_kaggle.ipynb` di Kaggle (GPU T4, Internet on), lalu Run All.
+**Bahasa Indonesia.** Sistem pemantauan jalur busway dari CCTV publik JakCCTV: YOLO11s hasil fine-tune membedakan bus Transjakarta dan kendaraan lain di jalur busway, lalu hasilnya tampil di dasbor web 5 halaman (tersedia bahasa Indonesia dan Inggris). Ini pemantauan, bukan penilangan. Cara menjalankan: buka `notebooks/dasbor_kaggle.ipynb` di Kaggle (GPU T4, Internet on), lalu Run All. Tim: Dihar, Ivan, Gerry; dibantu Claude (Anthropic) sebagai asisten koding.
