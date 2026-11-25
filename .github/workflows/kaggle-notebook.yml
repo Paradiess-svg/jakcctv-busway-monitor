@@ -1,0 +1,45 @@
+name: Sync dashboard notebook to Kaggle
+
+# Setiap kali notebooks/dasbor_kaggle.ipynb berubah di main, notebook publik
+# di Kaggle (izdiharwibowo/dasbor-tj-vs-non-tj) ikut diperbarui.
+# Pakai --no-run (= Quick Save): versi baru dibuat tanpa menjalankan sel,
+# jadi sel 6 yang berisi loop while True tidak menggantung sesi.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "notebooks/dasbor_kaggle.ipynb"
+      - "notebooks/kernel-metadata.json"
+      - ".github/workflows/kaggle-notebook.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  push-notebook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Kaggle CLI
+        run: pip install --quiet --disable-pip-version-check "kaggle>=1.7"
+
+      - name: Check credentials are configured
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo "::error::Secret KAGGLE_API_TOKEN belum diisi (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+
+      - name: Push notebook (Quick Save, no run)
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: kaggle kernels push -p notebooks --no-run
