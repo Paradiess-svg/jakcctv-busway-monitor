@@ -92,9 +92,18 @@
   @media (max-width:600px) { main { padding:20px 16px; margin:0 6px 6px; } .grid4 { grid-template-columns:1fr; } .ringkas .isi { grid-template-columns:1fr 1fr; } }
   .ikon { width:15px; height:15px; vertical-align:-3px; margin-right:5px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
   .tombolkam { display:flex; gap:8px; margin:8px 0 10px; }
-  .bahasa { margin-left:auto; display:flex; background:#14336b; border-radius:10px; padding:3px; }
-  .bahasa button { font:600 13px Inter,system-ui,sans-serif; color:#c9d4ea; background:none; border:none; padding:7px 13px; border-radius:8px; cursor:pointer; }
-  .bahasa button.aktif { background:var(--teal); color:var(--navy); }
+  .kanan { margin-left:auto; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .bahasa, .mode { display:flex; background:#14336b; border-radius:10px; padding:3px; }
+  .bahasa button, .mode button { font:600 13px Inter,system-ui,sans-serif; color:#c9d4ea; background:none; border:none; padding:7px 13px; border-radius:8px; cursor:pointer; }
+  .bahasa button.aktif, .mode button.aktif { background:var(--teal); color:var(--navy); }
+  .mode .lbl { color:#8fa3c7; font-size:12px; padding:7px 4px 7px 10px; }
+  th.no, td.no { width:34px; padding-right:2px; color:var(--redup); text-align:right; }
+  .bintang { color:var(--non); font-size:.6em; vertical-align:super; margin-left:2px; }
+  .stat.biru .bintang { color:#ffd27a; }
+  footer .catatan { text-align:right; max-width:58%; }
+  footer .catatan .bintang { font-size:1em; vertical-align:baseline; }
+  .hakcipta { text-align:center; color:var(--redup); font-size:12px; margin-top:14px; padding-top:12px; border-top:1px solid var(--garis); }
+  .hakcipta a { color:inherit; }
   .tombolkam .vbtn { width:auto; padding:0 12px; height:30px; display:inline-flex; align-items:center; font:600 12px Inter,system-ui,sans-serif; }
 </style>
 </head>
@@ -108,7 +117,10 @@
     <a href="#peta" data-h="peta">Peta</a>
     <a href="#insight" data-h="insight">Data Insight</a>
   </nav>
-  <div class="bahasa" role="group" aria-label="Bahasa / Language"><button data-lang="id">ID</button><button data-lang="en">EN</button></div>
+  <div class="kanan">
+    <div class="mode" role="group" aria-label="Mode studi kasus"><span class="lbl">Mode</span><button data-mode="semua">Normal</button><button data-mode="tanpa_ladokgi">Tanpa Ladokgi</button><button data-mode="busway">Busway Only</button></div>
+    <div class="bahasa" role="group" aria-label="Bahasa / Language"><button data-lang="id">ID</button><button data-lang="en">EN</button></div>
+  </div>
 </header>
 <main>
   <div class="judul">
@@ -124,8 +136,8 @@
       <div class="baris" style="justify-content:space-between"><div><h2>Riwayat kendaraan terbaru</h2><p class="ket">Deteksi kendaraan TJ dan non-TJ (kartu angka di atas ikut filter ini)</p></div>
         <select id="dKam" class="filterKam"><option value="">Semua kamera</option></select></div>
       <div class="log2">
-        <div class="logbox"><h4 class="tj">Log TJ (bus TJ, mikrotrans)</h4><table><thead><tr><th>Waktu</th><th>Kamera</th><th>Kelas</th><th>Conf</th><th>Foto</th></tr></thead><tbody id="dTj"></tbody></table></div>
-        <div class="logbox"><h4 class="non">Log non-TJ (bus lain, mobil, motor, truk)</h4><table><thead><tr><th>Waktu</th><th>Kamera</th><th>Kelas</th><th>Conf</th><th>Foto</th></tr></thead><tbody id="dNon"></tbody></table></div>
+        <div class="logbox"><h4 class="tj">Log TJ (bus TJ, mikrotrans)</h4><table><thead><tr><th class="no">No</th><th>Waktu</th><th>Kamera</th><th>Kelas</th><th>Conf</th><th>Foto</th></tr></thead><tbody id="dTj"></tbody></table></div>
+        <div class="logbox"><h4 class="non">Log non-TJ (bus lain, mobil, motor, truk)</h4><table><thead><tr><th class="no">No</th><th>Waktu</th><th>Kamera</th><th>Kelas</th><th>Conf</th><th>Foto</th></tr></thead><tbody id="dNon"></tbody></table></div>
       </div>
       <p class="kecil" style="margin-top:12px">Sumber: deteksi kamera JakCCTV (YOLO11 + ROI jalur busway, dicatat setelah ≥ 2 detik di ROI)</p>
     </div>
@@ -154,8 +166,8 @@
     <div class="kartu">
       <h2>Log deteksi kendaraan</h2><p class="ket" id="camLogKet"></p>
       <div class="log2">
-        <div class="logbox"><h4 class="tj">Log TJ (bus TJ, mikrotrans)</h4><table><thead><tr><th>Waktu</th><th>Kelas</th><th>Conf</th><th>Foto</th></tr></thead><tbody id="cTj"></tbody></table></div>
-        <div class="logbox"><h4 class="non">Log non-TJ (bus lain, mobil, motor, truk)</h4><table><thead><tr><th>Waktu</th><th>Kelas</th><th>Conf</th><th>Foto</th></tr></thead><tbody id="cNon"></tbody></table></div>
+        <div class="logbox"><h4 class="tj">Log TJ (bus TJ, mikrotrans)</h4><table><thead><tr><th class="no">No</th><th>Waktu</th><th>Kelas</th><th>Conf</th><th>Foto</th></tr></thead><tbody id="cTj"></tbody></table></div>
+        <div class="logbox"><h4 class="non">Log non-TJ (bus lain, mobil, motor, truk)</h4><table><thead><tr><th class="no">No</th><th>Waktu</th><th>Kelas</th><th>Conf</th><th>Foto</th></tr></thead><tbody id="cNon"></tbody></table></div>
       </div>
     </div>
     <div class="kartu" style="margin-top:22px">
@@ -179,8 +191,8 @@
           <select id="fVer"><option value="">Semua</option><option value="belum">Belum dicek</option><option value="benar">Ditandai benar</option><option value="salah">Ditandai salah</option></select>
         </div>
         <div class="log2">
-          <div class="logbox tinggi"><h4 class="tj">Log TJ (bus TJ, mikrotrans) <span class="kecil" id="nTjLog"></span></h4><table><thead><tr><th>Waktu</th><th>Kamera</th><th>Kelas</th><th>Conf</th><th>Foto</th><th>Cek</th></tr></thead><tbody id="lTj"></tbody></table><div class="halaman-nav" id="pTj"></div></div>
-          <div class="logbox tinggi"><h4 class="non">Log non-TJ (bus lain, mobil, motor, truk) <span class="kecil" id="nNonLog"></span></h4><table><thead><tr><th>Waktu</th><th>Kamera</th><th>Kelas</th><th>Conf</th><th>Foto</th><th>Cek</th></tr></thead><tbody id="lNon"></tbody></table><div class="halaman-nav" id="pNon"></div></div>
+          <div class="logbox tinggi"><h4 class="tj">Log TJ (bus TJ, mikrotrans) <span class="kecil" id="nTjLog"></span></h4><table><thead><tr><th class="no">No</th><th>Waktu</th><th>Kamera</th><th>Kelas</th><th>Conf</th><th>Foto</th><th>Cek</th></tr></thead><tbody id="lTj"></tbody></table><div class="halaman-nav" id="pTj"></div></div>
+          <div class="logbox tinggi"><h4 class="non">Log non-TJ (bus lain, mobil, motor, truk) <span class="kecil" id="nNonLog"></span></h4><table><thead><tr><th class="no">No</th><th>Waktu</th><th>Kamera</th><th>Kelas</th><th>Conf</th><th>Foto</th><th>Cek</th></tr></thead><tbody id="lNon"></tbody></table><div class="halaman-nav" id="pNon"></div></div>
         </div>
       </div>
       <div>
@@ -229,7 +241,8 @@
     <div class="ringkas"><div style="font-size:20px;font-weight:700">Ringkasan pemantauan</div><div class="isi" id="ringkasIsi"></div></div>
   </section>
 
-  <footer><span>JakCCTV / Pemantauan jalur busway Jakarta (deteksi, bukan penilangan)</span><span id="ftgl"></span></footer>
+  <footer><span>JakCCTV / Pemantauan jalur busway Jakarta (deteksi, bukan penilangan)</span><span class="catatan" id="catatanMode"></span></footer>
+  <div class="hakcipta">© 2026 JakCCTV Busway Monitor · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener license">Attribution-NonCommercial-ShareAlike 4.0 International</a></div>
 </main>
 
 <div class="modal" id="modal"><div><img id="modalImg" alt=""><div class="info" id="modalInfo"></div></div></div>
@@ -282,6 +295,24 @@ const EN = {
   'Komposisi kendaraan': 'Vehicle composition', 'Per kelas': 'By class', 'Ringkasan pemantauan': 'Monitoring summary',
   'JakCCTV / Pemantauan jalur busway Jakarta (deteksi, bukan penilangan)': 'JakCCTV / Jakarta busway lane monitoring (detection, not ticketing)',
   'Pilih kamera': 'Choose camera', 'Bahasa / Language': 'Language',
+  'Tanpa Ladokgi': 'No Ladokgi', 'Mode studi kasus': 'Case-study mode',
+};
+// ---------- mode studi kasus: ?mode= di URL atau tombol di header, disimpan di browser (pilihan per penonton) ----------
+const MODE = (() => {
+  const ok = m => ['semua', 'tanpa_ladokgi', 'busway'].includes(m);
+  const q = new URLSearchParams(location.search).get('mode');
+  if (ok(q)) { try { localStorage.setItem('tjMode', q); } catch (e) {} return q; }
+  try { const m = localStorage.getItem('tjMode'); return ok(m) ? m : 'semua'; } catch (e) { return 'semua'; }
+})();
+let SEMBUNYI = new Set();                          // diisi dari /api/info (config dasbor.mode)
+const tampil = k => !SEMBUNYI.has(k);
+const qMode = (u) => u + (u.includes('?') ? '&' : '?') + 'mode=' + MODE;
+const CATATAN_MODE = {
+  semua: TL('<span class="bintang">*</span> Tidak menghitung Flyover Ladokgi: kamera ini pengganti CCTV Gatot Subroto C14 yang bergeser dan bukan jalur busway. Kendaraannya tetap tercatat di log.',
+            '<span class="bintang">*</span> Excludes Flyover Ladokgi: it replaces the Gatot Subroto C14 CCTV that was knocked out of position, and it is not a busway lane. Its vehicles are still recorded in the log.'),
+  tanpa_ladokgi: TL('Mode Tanpa Ladokgi: hanya 3 kamera jalur busway (Flyover Ladokgi disembunyikan).', 'No Ladokgi mode: only the 3 busway cameras (Flyover Ladokgi hidden).'),
+  busway: TL('Mode Busway Only: hanya jalur busway murni. Flyover Ladokgi (bukan busway) dan Taman Literasi (pintu masuk Terminal Blok M) disembunyikan.',
+             'Busway Only mode: pure busway lanes only. Flyover Ladokgi (not a busway) and Taman Literasi (Blok M Terminal entrance) are hidden.'),
 };
 function terjemahkanStatis() {
   document.documentElement.lang = LANG;
@@ -289,6 +320,11 @@ function terjemahkanStatis() {
     b.classList.toggle('aktif', b.dataset.lang === LANG);
     b.onclick = () => { try { localStorage.setItem('tjLang', b.dataset.lang); } catch (e) {} const u = new URL(location.href); u.searchParams.delete('lang'); history.replaceState(null, '', u.toString()); location.reload(); };
   });
+  document.querySelectorAll('.mode button').forEach(b => {
+    b.classList.toggle('aktif', b.dataset.mode === MODE);
+    b.onclick = () => { try { localStorage.setItem('tjMode', b.dataset.mode); } catch (e) {} const u = new URL(location.href); u.searchParams.delete('mode'); history.replaceState(null, '', u.toString()); location.reload(); };
+  });
+  $('catatanMode').innerHTML = CATATAN_MODE[MODE];
   if (!EN_) return;
   const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   for (let n; (n = w.nextNode());) { const t = n.nodeValue.trim(); if (t && EN[t]) n.nodeValue = n.nodeValue.replace(t, EN[t]); }
@@ -318,14 +354,14 @@ const HAL = EN_ ? { dashboard: ['Dashboard', 'Monitoring vehicles, cameras, and 
   : { dashboard: ['Dashboard', 'Pemantauan kendaraan, kamera, dan sterilisasi jalur busway.'],
   cam: ['Cam', 'Pemantauan langsung kamera dan deteksi kendaraan.'], log: ['Log Kendaraan', 'Riwayat deteksi kendaraan TJ dan non-TJ.'],
   peta: ['Peta', 'Pantau kondisi lalu lintas di wilayah pemantauan.'], insight: ['Data Insight', 'Ringkasan statistik kendaraan dan visualisasi data.'] };
-let KAM = [], namaKam = {}, status = { kamera: [] }, halaman = 'dashboard', camAktif = null;
+let KAM = [], namaKam = {}, status = { kamera: [] }, statusSemua = { kamera: [] }, halaman = 'dashboard', camAktif = null;
 
 // ---------- jam ----------
 function jam() {
   const d = new Date();
   $('jam').textContent = d.toLocaleTimeString(LOC, { hour12: false }).replaceAll('.', ':') + ' WIB';
   const t = d.toLocaleDateString(LOC, { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
-  $('tgl').textContent = t; $('ftgl').textContent = t;
+  $('tgl').textContent = t;
 }
 setInterval(jam, 1000); jam();
 
@@ -354,6 +390,7 @@ document.addEventListener('click', ev => {
   if (img) { $('modalImg').src = img.dataset.full || img.src; $('modalInfo').textContent = img.dataset.info || ''; $('modal').classList.add('buka'); }
   if (ev.target.id === 'modal' || ev.target.closest('#modal img')) $('modal').classList.remove('buka');
 });
+function saringStatus(s) { statusSemua = s; return { ...s, kamera: (s.kamera || []).filter(c => tampil(c.kamera)) }; }
 function stKam(k) { return status.kamera.find(c => c.kamera === k); }
 function teksStatus(c) {
   if (!c) return ['mati', 'Offline'];
@@ -367,11 +404,13 @@ function teksStatus(c) {
 function kartuStat(r) {
   const s = r.sterilisasi_persen == null ? '–' : r.sterilisasi_persen + '%';
   const lg = r.bukan_busway;
+  // bintang: angka ini tidak menghitung kamera bukan-busway yang sedang tampil (penjelasan di bawah halaman)
+  const bt = !r.kamera && r.kamera_dikecualikan && r.kamera_dikecualikan.length ? '<span class="bintang">*</span>' : '';
   const html = `
-    <div class="kartu stat biru"><div class="lbl">${TL('Total kendaraan melintas', 'Total vehicles passing')}</div><div class="nil">${r.total_kendaraan.toLocaleString(LOC)}</div><div class="sub">${TL('di jalur busway ', 'in the busway lane ')}${r.periode === 'hari_ini' ? TL('hari ini', 'today') : TL('(semua data)', '(all data)')}</div></div>
+    <div class="kartu stat biru"><div class="lbl">${TL('Total kendaraan melintas', 'Total vehicles passing')}</div><div class="nil">${r.total_kendaraan.toLocaleString(LOC)}${bt}</div><div class="sub">${TL('di jalur busway ', 'in the busway lane ')}${r.periode === 'hari_ini' ? TL('hari ini', 'today') : TL('(semua data)', '(all data)')}</div></div>
     <div class="kartu stat"><div class="lbl">${TL('Kamera Online', 'Cameras Online')}</div><div class="nil">${r.kamera_online}/${r.kamera_total}</div><div class="sub">${TL('kamera terhubung', 'cameras connected')}</div></div>
-    <div class="kartu stat merah"><div class="lbl">${TL('Kendaraan Melanggar', 'Violating Vehicles')}</div><div class="nil">${lg ? '–' : r.non_tj.toLocaleString(LOC)}</div><div class="sub">${lg ? TL('bukan jalur busway (pengganti CCTV)', 'not a busway lane (substitute CCTV)') : TL('kendaraan non-TJ di jalur busway', 'non-TJ vehicles in the busway lane')}</div></div>
-    <div class="kartu stat mint"><div class="lbl">${TL('Sterilisasi Busway', 'Busway Sterility')}</div><div class="nil">${s}</div><div class="sub">${TL('porsi kendaraan TJ di jalur busway', 'share of TJ vehicles in the busway lane')}</div></div>`;
+    <div class="kartu stat merah"><div class="lbl">${TL('Kendaraan Melanggar', 'Violating Vehicles')}</div><div class="nil">${lg ? '–' : r.non_tj.toLocaleString(LOC) + bt}</div><div class="sub">${lg ? TL('bukan jalur busway (pengganti CCTV)', 'not a busway lane (substitute CCTV)') : TL('kendaraan non-TJ di jalur busway', 'non-TJ vehicles in the busway lane')}</div></div>
+    <div class="kartu stat mint"><div class="lbl">${TL('Sterilisasi Busway', 'Busway Sterility')}</div><div class="nil">${s}${r.sterilisasi_persen == null ? '' : bt}</div><div class="sub">${TL('porsi kendaraan TJ di jalur busway', 'share of TJ vehicles in the busway lane')}</div></div>`;
   document.querySelectorAll('[data-statkartu]').forEach(el => el.innerHTML = html);
 }
 
@@ -412,17 +451,17 @@ document.addEventListener('click', async ev => {
   const k = b.dataset.kam, c = stKam(k);
   const aksi = b.dataset.aksi === 'toggle' ? (c && c.nyala !== false ? 'mati' : 'nyala') : 'nyala';
   b.disabled = true; b.textContent = aksi === 'mati' ? TL('Mematikan...', 'Turning off...') : TL('Menyambung...', 'Connecting...');
-  try { status = await post(`/api/live/${k}/${aksi}`); } catch (e) { alert(e.message); }
+  try { status = saringStatus(await post(`/api/live/${k}/${aksi}`)); } catch (e) { alert(e.message); }
   b.disabled = false; segarkan();
 });
-function barisLog(e, adaKam) {
-  return `<tr><td>${e.waktu.slice(11, 19)}</td>${adaKam ? `<td>${esc(e.nama_kamera)}</td>` : ''}<td>${kelas(e.kelas)}</td><td>${e.conf_rata2.toFixed(2)}</td>${fotoTd(e)}</tr>`;
+function barisLog(e, adaKam, no) {
+  return `<tr><td class="no">${no}</td><td>${e.waktu.slice(11, 19)}</td>${adaKam ? `<td>${esc(e.nama_kamera)}</td>` : ''}<td>${kelas(e.kelas)}</td><td>${e.conf_rata2.toFixed(2)}</td>${fotoTd(e)}</tr>`;
 }
 async function muatLogRingkas(kam, idTj, idNon, adaKam) {
   const q = kam ? '&kamera=' + kam : '';
-  const [a, b] = await Promise.all([api('/api/log?kelompok=tj&batas=15' + q), api('/api/log?kelompok=non_tj&batas=15' + q)]);
-  $(idTj).innerHTML = a.data.map(e => barisLog(e, adaKam)).join('') || `<tr><td colspan="5" class="kecil">${TL('Belum ada', 'None yet')}</td></tr>`;
-  $(idNon).innerHTML = b.data.map(e => barisLog(e, adaKam)).join('') || `<tr><td colspan="5" class="kecil">${TL('Belum ada', 'None yet')}</td></tr>`;
+  const [a, b] = await Promise.all([api(qMode('/api/log?kelompok=tj&batas=15' + q)), api(qMode('/api/log?kelompok=non_tj&batas=15' + q))]);
+  $(idTj).innerHTML = a.data.map((e, i) => barisLog(e, adaKam, i + 1)).join('') || `<tr><td colspan="7" class="kecil">${TL('Belum ada', 'None yet')}</td></tr>`;
+  $(idNon).innerHTML = b.data.map((e, i) => barisLog(e, adaKam, i + 1)).join('') || `<tr><td colspan="7" class="kecil">${TL('Belum ada', 'None yet')}</td></tr>`;
 }
 
 // ---------- cam ----------
@@ -435,11 +474,11 @@ function isiPilihan() {
 async function pasangCam() {
   camAktif = camAktif || (status.kamera[0] || {}).kamera || (KAM[0] || {}).id;
   $('camPilih').value = camAktif;
-  const jalan = status.kamera.map(c => c.kamera);
+  const jalan = statusSemua.kamera.map(c => c.kamera);   // termasuk kamera yang disembunyikan mode
   if (BOLEH_UBAH && status.aktif && !jalan.includes(camAktif)) {   // kamera belum masuk grid live -> gantikan kamera terakhir
     const baru = jalan.length >= 4 ? [...jalan.slice(0, 3), camAktif] : [...jalan, camAktif];
     $('camVideo').innerHTML = `<div class="kosong">${TL('Menyalakan kamera...', 'Starting camera...')}</div>`;
-    await post('/api/live/start', { kamera: baru }); status = await api('/api/live/status'); gridCam();
+    await post('/api/live/start', { kamera: baru }); status = saringStatus(await api('/api/live/status')); gridCam();
   }
   $('camNama').textContent = namaKam[camAktif]; $('camTombol').innerHTML = tombolKam(camAktif, 'c'); $('psNama').textContent = namaKam[camAktif];
   $('camVideo').innerHTML = `<img id="camImg" alt=""><div class="kosong" id="camKosong" style="display:none">${TL('Kamera dimatikan. Pencatatan berhenti sampai dinyalakan lagi.', 'Camera turned off. Logging stops until it is turned on again.')}</div>`;
@@ -483,9 +522,9 @@ $('upKirim').onclick = async () => {
 
 // ---------- log + verifikasi ----------
 const hlm = { tj: 0, non_tj: 0 }, PER = 50;
-function barisVerif(e) {
+function barisVerif(e, no) {
   const b = e.verifikasi === 'benar' ? ' on' : '', s = e.verifikasi === 'salah' ? ' on' : '';
-  return `<tr><td>${e.waktu.slice(5, 16).replace('-', '/')}</td><td>${esc(e.nama_kamera)}</td><td>${kelas(e.kelas)}</td><td>${e.conf_rata2.toFixed(2)}</td>${fotoTd(e)}
+  return `<tr><td class="no">${no}</td><td>${e.waktu.slice(5, 16).replace('-', '/')}</td><td>${esc(e.nama_kamera)}</td><td>${kelas(e.kelas)}</td><td>${e.conf_rata2.toFixed(2)}</td>${fotoTd(e)}
     <td style="white-space:nowrap"><button class="vbtn benar${b}" data-id="${esc(e.id)}" data-s="benar" title="${TL('Benar', 'Correct')}">✓</button> <button class="vbtn salah${s}" data-id="${esc(e.id)}" data-s="salah" title="${TL('Salah', 'Wrong')}">✗</button></td></tr>`;
 }
 async function muatLogSatu(kel) {
@@ -493,9 +532,10 @@ async function muatLogSatu(kel) {
   if ($('fKam').value) q.set('kamera', $('fKam').value);
   if ($('fTgl').value) q.set('tanggal', $('fTgl').value);
   if ($('fVer').value) q.set('verifikasi', $('fVer').value);
+  q.set('mode', MODE);
   const r = await api('/api/log?' + q);
   const tb = kel === 'tj' ? 'lTj' : 'lNon', pg = kel === 'tj' ? 'pTj' : 'pNon';
-  $(tb).innerHTML = r.data.map(barisVerif).join('') || `<tr><td colspan="6" class="kecil">${TL('Tidak ada data', 'No data')}</td></tr>`;
+  $(tb).innerHTML = r.data.map((e, i) => barisVerif(e, hlm[kel] * PER + i + 1)).join('') || `<tr><td colspan="7" class="kecil">${TL('Tidak ada data', 'No data')}</td></tr>`;
   $(kel === 'tj' ? 'nTjLog' : 'nNonLog').textContent = `(${r.total.toLocaleString(LOC)})`;
   $(kel === 'tj' ? 'pbTj' : 'pbNon').textContent = `${kel === 'tj' ? 'TJ' : 'Non-TJ'}: ${r.total.toLocaleString(LOC)}`;
   const nh = Math.max(1, Math.ceil(r.total / PER));
@@ -515,7 +555,7 @@ document.addEventListener('click', async ev => {
   if (p) { hlm[p.dataset.pg] += +p.dataset.d; muatLogSatu(p.dataset.pg); }
 });
 async function muatAkurasi() {
-  const a = await api('/api/akurasi'), v = a.verifikasi_manusia;
+  const a = await api(qMode('/api/akurasi')), v = a.verifikasi_manusia;
   const baris = [[TL('Semua log', 'All logs'), v.semua], [TL('Log TJ', 'TJ log'), v.tj], [TL('Log non-TJ', 'Non-TJ log'), v.non_tj], ...KAM.map(k => [k.nama, v[k.id]])];
   $('akTabel').innerHTML = baris.map(([n, d]) => `<tr><td>${esc(n)}</td><td style="text-align:right;font-weight:700">${d ? d.persen_benar + '%' : '–'}</td><td class="kecil" style="text-align:right">${d ? d.benar + '/' + d.dicek : TL('belum dicek', 'not checked')}</td></tr>`).join('');
   const t = a.uji_model_data_test;
@@ -560,7 +600,7 @@ function updPeta() {
 let chB = null, chP = null;
 const WARNA_KELAS = { tj_bus: '#1f9d55', mikrotrans: '#2fd3a0', bus_lain: '#e8a33d', car: '#3b6fd8', motorcycle: '#8b5cf6', truck: '#d64545' };
 async function muatInsight() {
-  const r = await api('/api/ringkasan?periode=' + $('periode').value + ($('iKam').value ? '&kamera=' + $('iKam').value : ''));
+  const r = await api(qMode('/api/ringkasan?periode=' + $('periode').value + ($('iKam').value ? '&kamera=' + $('iKam').value : '')));
   kartuStat(r);
   const lab = r.per_jam.map(x => x.jam + ':00');
   const dsB = [{ label: 'TJ', data: r.per_jam.map(x => x.tj), backgroundColor: '#1f9d55', borderRadius: 4 },
@@ -581,11 +621,11 @@ $('periode').onchange = muatInsight; $('iKam').onchange = muatInsight; $('dKam')
 // ---------- siklus ----------
 async function segarkan() {
   try {
-    status = await api('/api/live/status');
+    status = saringStatus(await api('/api/live/status'));
     $('sistem').className = 'pil ' + (status.aktif ? 'on' : 'off');
     $('sistem').innerHTML = `<span class="titik"></span>${status.aktif ? TL('Sistem Online', 'System Online') : TL('Live tidak aktif', 'Live not active')}`;
     const dk = $('dKam').value;
-    if (halaman === 'dashboard') { updGrid(); kartuStat(await api('/api/ringkasan' + (dk ? '?kamera=' + dk : ''))); muatLogRingkas(dk || null, 'dTj', 'dNon', true); }
+    if (halaman === 'dashboard') { updGrid(); kartuStat(await api(qMode('/api/ringkasan' + (dk ? '?kamera=' + dk : '')))); muatLogRingkas(dk || null, 'dTj', 'dNon', true); }
     if (halaman === 'cam') { updLampu(); updTombol(); }
     if (halaman === 'peta') updPeta();
   } catch (e) { $('sistem').className = 'pil off'; $('sistem').innerHTML = '<span class="titik"></span>' + TL('Server tidak terhubung', 'Server not connected'); }
@@ -593,9 +633,10 @@ async function segarkan() {
 async function mulai() {
   const inf = await api('/api/info');
   BOLEH_UBAH = !inf.butuh_token || !!TOKEN;
-  KAM = await api('/api/kamera'); KAM.forEach(k => namaKam[k.id] = k.nama); isiPilihan();
-  status = await api('/api/live/status');
-  if (!status.aktif) { $('sistem').innerHTML = '<span class="titik"></span>' + TL('Menyalakan live...', 'Starting live...'); status = await api('/api/live/bangun'); }
+  SEMBUNYI = new Set((inf.mode || {})[MODE] || []);
+  KAM = (await api('/api/kamera')).filter(k => tampil(k.id)); KAM.forEach(k => namaKam[k.id] = k.nama); isiPilihan();
+  status = saringStatus(await api('/api/live/status'));
+  if (!status.aktif) { $('sistem').innerHTML = '<span class="titik"></span>' + TL('Menyalakan live...', 'Starting live...'); status = saringStatus(await api('/api/live/bangun')); }
   gridCam(); buka();
   setInterval(segarkan, 2500);
   setInterval(() => { if (halaman === 'cam') updLampu(); }, 700);   // kuning berkedip

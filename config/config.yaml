@@ -31,6 +31,12 @@ cameras:
 dasbor:
   kamera_default: [c01_taman_literasi, c04_gerbang_pemuda, c13_gatsu, ladokgi_c01]
   bukan_busway: [ladokgi_c01]   # Flyover Ladokgi = pengganti CCTV rusak, bukan busway -> dikecualikan dari 'Kendaraan Melanggar' & sterilisasi
+  # Mode studi kasus di dasbor (tombol di header, pilihan per penonton): kamera yang DISEMBUNYIKAN per mode
+  # (kamera, log, peta, angka, akurasi). Live di server tetap jalan untuk semua kamera.
+  mode:
+    semua: []                                      # normal, 4 kamera
+    tanpa_ladokgi: [ladokgi_c01]                   # Ladokgi bukan busway (pengganti CCTV Gatot Subroto C14)
+    busway: [ladokgi_c01, c01_taman_literasi]      # busway murni: Taman Literasi = pintu masuk Terminal Blok M
   live_idle_menit: 10       # live otomatis berhenti kalau dasbor tidak dibuka selama N menit (cegah RAM/pagefile bengkak)
   tampilan:
     c01_taman_literasi: {nama: "Taman Literasi", lokasi: [-6.242667, 106.798778]}

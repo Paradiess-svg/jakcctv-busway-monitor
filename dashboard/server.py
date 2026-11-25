@@ -68,7 +68,7 @@ async def tandai_dibuka(request, call_next):
 
 @app.get("/api/info", summary="Mode server: gpu, butuh token admin")
 def info():
-    return {"gpu": live.gpu, "butuh_token": bool(TOKEN)}
+    return {"gpu": live.gpu, "butuh_token": bool(TOKEN), "mode": _cfg_dasbor().get("mode", {"semua": []})}
 
 
 @app.get("/thumb/{path:path}", include_in_schema=False)
@@ -363,17 +363,23 @@ def _verif():
         return {}
 
 
-def _filter(data, kelompok=None, kamera=None, tanggal=None):
+def _sembunyi(mode):
+    """Kamera yang disembunyikan di mode studi kasus (config dasbor.mode); mode tak dikenal = semua tampil."""
+    return set((_cfg_dasbor().get("mode") or {}).get(mode or "semua") or [])
+
+
+def _filter(data, kelompok=None, kamera=None, tanggal=None, sembunyi=()):
     return [e for e in data if (not kelompok or e["kelompok"] == kelompok) and (not kamera or e["kamera"] == kamera)
-            and (not tanggal or e["waktu"].startswith(tanggal))]
+            and (not tanggal or e["waktu"].startswith(tanggal)) and e["kamera"] not in sembunyi]
 
 
 @app.get("/api/log", summary="Riwayat kejadian semua sesi live (terbaru dulu) + status verifikasi manusia")
 def log_riwayat(kelompok: str | None = Query(None, pattern="^(tj|non_tj)$"), kamera: str | None = None,
                 tanggal: str | None = Query(None, description="YYYY-MM-DD"),
-                verifikasi: str | None = Query(None, pattern="^(benar|salah|belum)$"), batas: int = 100, offset: int = 0):
+                verifikasi: str | None = Query(None, pattern="^(benar|salah|belum)$"), batas: int = 100, offset: int = 0,
+                mode: str = "semua"):
     v = _verif()
-    d = [{**e, "verifikasi": v.get(e["id"])} for e in _filter(_baca_semua_log(), kelompok, kamera, tanggal)]
+    d = [{**e, "verifikasi": v.get(e["id"])} for e in _filter(_baca_semua_log(), kelompok, kamera, tanggal, _sembunyi(mode))]
     if verifikasi:
         d = [e for e in d if (e["verifikasi"] or "belum") == verifikasi]
     return {"total": len(d), "data": d[offset:offset + batas]}
@@ -413,9 +419,9 @@ def _evaluasi_offline():
 
 
 @app.get("/api/akurasi", summary="Akurasi: (1) hasil verifikasi manusia di dasbor, (2) uji model di data test")
-def akurasi():
+def akurasi(mode: str = "semua"):
     v = _verif()
-    data = {e["id"]: e for e in _baca_semua_log()}
+    data = {e["id"]: e for e in _filter(_baca_semua_log(), sembunyi=_sembunyi(mode))}
     per = {}
     for rid, st in v.items():
         e = data.get(rid)
@@ -436,21 +442,23 @@ def _cfg_dasbor():
 
 
 @app.get("/api/ringkasan", summary="Angka kartu dasbor + data grafik (periode: hari_ini / semua / YYYY-MM-DD)")
-def ringkasan(periode: str = "hari_ini", kamera: str | None = None):
+def ringkasan(periode: str = "hari_ini", kamera: str | None = None, mode: str = "semua"):
     tgl = datetime.now().strftime("%Y-%m-%d") if periode == "hari_ini" else None if periode == "semua" else periode
-    d = _filter(_baca_semua_log(), kamera=kamera, tanggal=tgl)
+    sembunyi = _sembunyi(mode)
+    d = _filter(_baca_semua_log(), kamera=kamera, tanggal=tgl, sembunyi=sembunyi)
     # Flyover Ladokgi bukan jalur busway (hanya pengganti CCTV yang rusak): tidak dihitung sebagai
     # pelanggaran / sterilisasi / total di jalur busway. Datanya tetap tampil di log, grafik, dan peta.
-    kecuali = set(_cfg_dasbor().get("bukan_busway", []))
+    kecuali = set(_cfg_dasbor().get("bukan_busway", [])) - sembunyi
     tot = Counter(e["kelompok"] for e in d if e["kamera"] not in kecuali)
     n = tot["tj"] + tot["non_tj"]
     st = live.status()
-    aktif = [k for k, v in live.kamera_cfg.items() if v.get("aktif", True)]
+    aktif = [k for k, v in live.kamera_cfg.items() if v.get("aktif", True) and k not in sembunyi]
     per_jam = Counter((e["waktu"][11:13], e["kelompok"]) for e in d)
     return {"periode": periode, "tanggal": tgl, "total_kendaraan": n, "tj": tot["tj"], "non_tj": tot["non_tj"],
             "sterilisasi_persen": round(100 * tot["tj"] / n, 1) if n else None,
             "bukan_busway": kamera in kecuali if kamera else False, "kamera_dikecualikan": sorted(kecuali),
-            "kamera_online": sum(k["stream"] == "hidup" for k in st["kamera"]), "kamera_total": len(aktif),
+            "kamera_online": sum(k["stream"] == "hidup" for k in st["kamera"] if k["kamera"] not in sembunyi),
+            "kamera_total": len(aktif), "mode": mode, "kamera": kamera,
             "per_kelas": dict(Counter(e["kelas"] for e in d).most_common()),
             "per_kamera": {k: dict(Counter(e["kelompok"] for e in d if e["kamera"] == k)) for k in aktif},
             "per_jam": [{"jam": f"{j:02d}", "tj": per_jam[(f"{j:02d}", "tj")], "non_tj": per_jam[(f"{j:02d}", "non_tj")]}
