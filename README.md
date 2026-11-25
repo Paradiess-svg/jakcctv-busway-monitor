@@ -28,7 +28,8 @@ Built by Dihar, Ivan and Gerry (IPB University) for the course *Intelligent Comp
 ```
 JakCCTV HLS stream ─► frame quality filter (black / frozen frames)
                     ─► YOLO11s detection (7 classes) + ByteTrack
-                    ─► busway ROI polygon (bottom-centre point inside ≥ 2 s)
+                    ─► busway ROI polygon (bottom-centre point inside ≥ 2 s;
+                       TJ buses also count when ≥ 15% of the box covers the ROI)
                     ─► majority vote of the class over the track
                     ─► log TJ / non-TJ + snapshot ─► FastAPI dashboard
 ```
