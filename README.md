@@ -41,10 +41,22 @@ Classes: `tj_bus`, `bus_lain` (other bus), `car`, `motorcycle`, `truck`, `mikrot
 |---|---|
 | ![CLAHE](docs/img/clahe_day_night.png) | ![c vs d](docs/img/clahe_vs_no_clahe.png) |
 
+## Cameras
+
+| Camera (JakCCTV) | Dashboard name | In training data | Counted as busway |
+|---|---|---|---|
+| Satpol PP Taman Literasi C01 | Taman Literasi | yes | yes |
+| Satpol PP Jl. Gerbang Pemuda C04 | Gerbang Pemuda | yes | yes |
+| Polda Jl. Jend. Gatot Subroto C13 | Gatot Subroto | yes | yes |
+| Polda Jl. Jend. Gatot Subroto C14 | (retired) | yes | – |
+| DBM Flyover Ladokgi C01 | Flyover Ladokgi | no | **no** |
+
+**Why Flyover Ladokgi?** On 19 Nov 2026 the Gatot Subroto C14 camera was knocked out of position, and it no longer pointed at the busway lane. Its earlier frames stay in the dataset, but it was removed from the live dashboard. Flyover Ladokgi C01 was chosen as the fourth live camera as the replacement. Ladokgi is **not a busway lane**, so the dashboard leaves it out of *Total vehicles in the busway*, *Violating vehicles* and *Busway sterility* (`dasbor.bukan_busway` in `config/config.yaml`). Its detections still appear in the vehicle log, charts and map, because the log is a record of vehicles seen, not a list of violations.
+
 ## Run it
 
 ### Option A: Kaggle GPU (recommended, nothing to install)
-1. Import [`notebooks/dasbor_kaggle.ipynb`](notebooks/dasbor_kaggle.ipynb) into Kaggle. Settings: **GPU T4**, **Internet on**.
+1. Open the public notebook **[Dasbor TJ vs Non-TJ on Kaggle](https://www.kaggle.com/code/izdiharwibowo/dasbor-tj-vs-non-tj)** and click *Copy & Edit*, or import [`notebooks/dasbor_kaggle.ipynb`](notebooks/dasbor_kaggle.ipynb). Settings: **GPU T4**, **Internet on**.
 2. Run all. Cell 1 clones this repo, and cell 5 prints a public `trycloudflare.com` link for viewers plus an **admin** link (keep it private; it can switch cameras and verify detections).
 3. Add `?lang=en` to the link for the English interface. A toggle is also in the header.
 
@@ -73,7 +85,7 @@ m.predict("frame.jpg", conf=0.25, save=True)
 
 ## Dataset
 
-The dataset (1,401 human-checked images, 13,029 boxes, 7 classes, split by camera and date) is published separately on Kaggle: *JakCCTV Busway TJ vs Non-TJ (YOLO)*. Raw recordings are not in this repository.
+The dataset (1,401 human-checked images, 13,029 boxes, 7 classes, split by camera and date) is published on Kaggle: **[JakCCTV Busway TJ vs Non-TJ (YOLO)](https://www.kaggle.com/datasets/izdiharwibowo/jakcctv-busway-tj-vs-non-tj-yolo)**. Raw recordings are not in this repository.
 
 ## Limitations
 
@@ -101,4 +113,4 @@ Thanks to Ivan and Gerry for their support throughout this project.
 
 ---
 
-**Bahasa Indonesia.** Sistem pemantauan jalur busway dari CCTV publik JakCCTV: YOLO11s hasil fine-tune membedakan bus Transjakarta dan kendaraan lain di jalur busway, lalu hasilnya tampil di dasbor web 5 halaman (tersedia bahasa Indonesia dan Inggris). Ini pemantauan, bukan penilangan. Cara menjalankan: buka `notebooks/dasbor_kaggle.ipynb` di Kaggle (GPU T4, Internet on), lalu Run All. Tim: Dihar, Ivan, Gerry; dibantu Claude (Anthropic) sebagai asisten koding.
+**Bahasa Indonesia.** Sistem pemantauan jalur busway dari CCTV publik JakCCTV: YOLO11s hasil fine-tune membedakan bus Transjakarta dan kendaraan lain di jalur busway, lalu hasilnya tampil di dasbor web 5 halaman (tersedia bahasa Indonesia dan Inggris). Ini pemantauan, bukan penilangan. Kamera Flyover Ladokgi dipakai sebagai pengganti CCTV Gatot Subroto C14 yang bergeser sejak 19 Nov 2026 dan tidak lagi mengarah ke jalur busway. Karena Ladokgi bukan jalur busway, kamera ini tidak dihitung dalam *Kendaraan Melanggar* dan *Sterilisasi Busway*, tapi deteksinya tetap masuk log kendaraan. Dataset: [Kaggle](https://www.kaggle.com/datasets/izdiharwibowo/jakcctv-busway-tj-vs-non-tj-yolo). Cara menjalankan: buka [notebook Kaggle](https://www.kaggle.com/code/izdiharwibowo/dasbor-tj-vs-non-tj) atau `notebooks/dasbor_kaggle.ipynb` di Kaggle (GPU T4, Internet on), lalu Run All. Tim: Dihar, Ivan, Gerry; dibantu Claude (Anthropic) sebagai asisten koding.
