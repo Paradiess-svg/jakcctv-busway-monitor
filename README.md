@@ -57,7 +57,7 @@ Classes: `tj_bus`, `bus_lain` (other bus), `car`, `motorcycle`, `truck`, `mikrot
 ## Run it
 
 ### Option A: Kaggle GPU (recommended, nothing to install)
-1. Open the public notebook **[Dasbor TJ vs Non-TJ on Kaggle](https://www.kaggle.com/code/izdiharwibowo/dasbor-tj-vs-non-tj)** and click *Copy & Edit*, or import [`notebooks/dasbor_kaggle.ipynb`](notebooks/dasbor_kaggle.ipynb). Settings: **GPU T4**, **Internet on**.
+1. Open the public notebook **[Dasbor TJ vs Non-TJ on Kaggle](https://www.kaggle.com/code/izdiharwibowo/dasbor-tj-vs-non-tj)**(recomended for indonesian speakers) and click *Copy & Edit*, or import [`notebooks/dasbor_kaggle.ipynb`](notebooks/dasbor_kaggle.ipynb) (English text included). Settings: **GPU T4**, **Internet on**.
    *Maintainers: the public notebook is updated automatically from this repository on every push (GitHub Actions + Kaggle API). See [`notebooks/PUSH_KAGGLE.md`](notebooks/PUSH_KAGGLE.md).*
 2. Run all. Cell 1 clones this repo, and cell 5 prints a public `trycloudflare.com` link for viewers plus an **admin** link (keep it private; it can switch cameras and verify detections).
 3. Add `?lang=en` to the link for the English interface. A toggle is also in the header.
