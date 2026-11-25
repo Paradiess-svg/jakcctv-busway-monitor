@@ -102,9 +102,20 @@ class Monitor:
     def _siapkan_roi(self, w, h):
         sx, sy = w / self.roi_ukuran[0], h / self.roi_ukuran[1]
         self.roi = [(p * [sx, sy]).astype(np.int32) for p in self.roi_asli]
+        self.roi_mask = np.zeros((h, w), np.uint8)
+        cv2.fillPoly(self.roi_mask, self.roi, 1)
 
     def di_roi(self, x, y):
         return any(cv2.pointPolygonTest(p, (float(x), float(y)), False) >= 0 for p in self.roi)
+
+    def porsi_roi(self, x1, y1, x2, y2):
+        """Bagian kotak (0-1) yang menutupi ROI. Bus besar dekat kamera: titik bawah-tengah kotaknya jatuh di
+        luar jalur yang tipis walau badannya jelas di jalur busway (perspektif)."""
+        h, w = self.roi_mask.shape
+        x1, y1, x2, y2 = max(int(x1), 0), max(int(y1), 0), min(int(x2), w), min(int(y2), h)
+        if x2 <= x1 or y2 <= y1:
+            return 0.0
+        return float(self.roi_mask[y1:y2, x1:x2].mean())
 
     def olah(self, frame, detik, waktu=None):
         """frame BGR, detik = posisi waktu (detik) di video/stream, waktu = jam nyata (datetime) kalau live.
@@ -136,6 +147,11 @@ class Monitor:
                 kelas = t["kelas"].most_common(1)[0][0]
                 grup = self.grup.get(kelas, "abaikan")
                 masuk = self.di_roi((x1 + x2) / 2, y2)
+                # Kelompok TJ juga dianggap masuk kalau kotaknya cukup menutupi ROI (lihat porsi_roi). Non-TJ tetap
+                # pakai titik bawah-tengah saja: kotak truk/mobil di lajur sebelah juga menutupi ROI karena
+                # perspektif, jadi aturan porsi untuk non-TJ akan membuat "pelanggaran" palsu (diuji di label v2).
+                if not masuk and grup == "tj" and self.cfg.get("roi_porsi_tj"):
+                    masuk = self.porsi_roi(x1, y1, x2, y2) >= self.cfg["roi_porsi_tj"]
                 t["terakhir"] = detik
                 if masuk:
                     t["di_roi"] += dt

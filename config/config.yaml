@@ -121,6 +121,8 @@ monitor:
   proses_fps: 5               # frame yang diproses per detik video (CPU ~0,35 s/frame; sisanya dilewati)
   min_detik_di_roi: 2.0       # keputusan A: kendaraan dicatat setelah >= 2 detik di ROI
   titik_roi: "bawah_tengah"   # titik kendaraan yang dicek masuk ROI (roda menyentuh jalan)
+  roi_porsi_tj: 0.15          # 25 Nov: bus TJ/mikrotrans juga masuk ROI kalau >= 15% kotaknya menutupi ROI
+                              # (bus besar dekat kamera: titik bawah-tengah di luar jalur). 0 = matikan.
   dobel_iou: 0.5              # kendaraan diam (parkir) yang ID-nya berganti: posisi sama (IoU > ini)
   dobel_detik: 120            #   dan kelompok sama dalam N detik terakhir -> tidak dicatat ulang
   diam_detik: 600             # kendaraan DIAM (bus ngetem) yang sudah tercatat: kotak baru yang >60% menumpuk
