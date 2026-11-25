@@ -51,6 +51,19 @@ lihat nomor versi bertambah di tab **Versions**.
 Mau menjalankan ulang tanpa mengubah file: tab **Actions** → pilih workflow →
 **Run workflow**.
 
+Kalau secret `KAGGLE_API_TOKEN` belum diisi, workflow tetap hijau tapi langkah
+push **dilewati** dan muncul notice (bukan gagal). Isi secret-nya kalau mau
+sinkronisasi otomatis jalan.
+
+## Manual (dipakai selama secret belum diisi)
+
+1. Buka <https://www.kaggle.com/code/izdiharwibowo/dasbor-tj-vs-non-tj> → **Edit**.
+2. **File → Import Notebook → Upload**, pilih
+   `notebooks/dasbor_kaggle.ipynb` dari repo ini.
+3. Konfirmasi kalau Kaggle menawarkan **replace cells**.
+4. **Save Version → Quick Save**. Jangan **Save & Run All**: sel 6 berisi
+   `while True`, jadi commit akan menggantung sampai sesi habis.
+
 ## Kalau mau dari laptop (opsional, tidak disarankan saat disk penuh)
 
 ```powershell
